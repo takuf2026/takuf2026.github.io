@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="google-site-verification" content="SIoRgoa7xK6-EY5yk5LVYYAY-5p295A022BCaEsMlzc" />
+
+    <title>TED Atakent Koleji Ulusal Forumu - Resmi Web Sitesi</title>
+    
+    <link rel="icon" type="image/png" href="favicon.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        /* Kurumsal Renkler (TED Red & Navy) */
+        .ted-red { background-color: #E30613; }
+        .ted-red-text { color: #E30613; }
+        .ted-navy { background-color: #002244; }
+        .ted-navy-text { color: #002244; }
+
+        /* Inter Fontu */
+        body { font-family: 'Inter', sans-serif; }
+
+        /* Yüksekliği Sabit Tutmak için Main İçeriği */
+        #content-area {
+            min-height: 70vh;
+        }
+        
+        .nav-link:hover {
+            color: #E30613;
+            transform: translateY(-2px);
+        }
+
+        /* --- MOBİL MENÜ ÖZEL STİLLERİ: SAĞDAN AÇILIR --- */
+        
+        #mobile-menu {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 75%; 
+            max-width: 300px;
+            height: 100vh;
+            z-index: 55;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+            box-shadow: -6px 0 15px rgba(0, 0, 0, 0.6); 
+            overflow-y: auto;
+        }
+        
+        #mobile-menu.open {
+            transform: translateX(0);
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); 
+            z-index: 50;
+            display: none;
+            transition: opacity 0.3s;
+        }
+        #overlay.active {
+            display: block;
+        }
+
+        /* Genel Kart Stili */
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Yeni Buton Stili (Ana Sayfa CTA) */
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            background-color: #E30613;
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 2rem;
+            border-radius: 9999px;
+            box-shadow: 0 4px 6px -1px rgba(227, 6, 19, 0.5), 0 2px 4px -2px rgba(227, 6, 19, 0.5);
+            transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+        }
+        .cta-button:hover {
+            background-color: #b80510;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(227, 6, 19, 0.7), 0 4px 6px -4px rgba(227, 6, 19, 0.7);
+        }
+
+        /* Geri Sayım Kutusu Stili */
+        .countdown-item {
+            width: 22%;
+            max-width: 120px;
+            min-width: 60px;
+            aspect-ratio: 1 / 1; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="ted-navy shadow-lg relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="#ana-sayfa" class="flex items-center space-x-3 group cursor-pointer">
+                <div class="h-20 w-20 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0">
+                    <img src="Adobe Express - file.png"
+                         alt="TED Atakent Koleji Resmi Logosu" 
+                         class="h-full w-full object-cover">
+                </div>
+                <h1 class="text-xl sm:text-2xl font-extrabold text-white tracking-wider flex-shrink-1 min-w-0 group-hover:text-[#E30613] transition duration-200">TED Atakent Koleji Ulusal Forumu</h1>
+            </a>
+
+            <button id="mobile-menu-button" class="text-white focus:outline-none z-50 p-2 rounded-lg hover:bg-red-700 transition duration-150">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <div id="overlay"></div>
+
+    <div id="mobile-menu" class="ted-navy p-6">
+        <div class="flex justify-end mb-6">
+            <button id="close-menu-button" class="text-white text-2xl hover:text-red-400">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <nav class="flex flex-col space-y-4">
+            <a href="#ana-sayfa" class="mobile-nav-link text-white text-lg font-medium p-3 hover:bg-red-700 rounded transition duration-150 border-b border-gray-700" data-page="ana-sayfa">Ana Sayfa</a>
+            <a href="#duyurular" class="mobile-nav-link text-white text-lg font-medium p-3 hover:bg-red-700 rounded transition duration-150 border-b border-gray-700" data-page="duyurular">Duyurular</a>
+            <a href="#hakkinda" class="mobile-nav-link text-white text-lg font-medium p-3 hover:bg-red-700 rounded transition duration-150 border-b border-gray-700" data-page="hakkinda">Hakkımızda</a>
+            <a href="#komiteler" class="mobile-nav-link text-white text-lg font-medium p-3 hover:bg-red-700 rounded transition duration-150 border-b border-gray-700" data-page="komiteler">Komitelerimiz</a>
+            <a href="#kurallar" class="mobile-nav-link text-white text-lg font-medium p-3 hover:bg-red-700 rounded transition duration-150 border-b border-gray-700" data-page="kurallar">Genel Şartlar</a>
+            <a href="#program" class="mobile-nav-link text-white text-lg font-medium p-3 hover:bg-red-700 rounded transition duration-150 border-b border-gray-700" data-page="program">Program Akışı</a>
+            <a href="#basvuru" class="mobile-nav-link text-white text-lg font-medium p-3 hover:bg-red-700 rounded transition duration-150 border-b border-gray-700" data-page="basvuru">Başvurular</a>
+            <a href="#iletisim" class="mobile-nav-link text-white text-lg font-medium p-3 hover:bg-red-700 rounded transition duration-150" data-page="iletisim">İletişim</a>
+        </nav>
+    </div>
+
+    <main id="content-area" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 transition-opacity duration-300">
+    </main>
+
+    <footer class="ted-navy text-white mt-10 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-sm">© 2026 TED Atakent Koleji Ulusal Forumu (TAKUF). Tüm hakları saklıdır. | TED Atakent Koleji Organizasyonu</p>
+            <div class="flex justify-center space-x-6 mt-4">
+                <a href="https://www.instagram.com/takuf26?igsh=ZXo3azFja2JjM2c3&utm_source=qr" target="_blank" class="hover:text-red-400 transition duration-150" aria-label="Instagram"><i class="fab fa-instagram text-xl"></i></a>
+                <a href="https://www.tiktok.com/@takuf26?_r=1&_t=ZS-93GJ4FvQzFV" target="_blank" class="hover:text-red-400 transition duration-150" aria-label="TikTok"><i class="fab fa-tiktok text-xl"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const contentArea = document.getElementById('content-area');
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMenuButton = document.getElementById('close-menu-button');
+        const overlay = document.getElementById('overlay');
+        const navLinks = document.querySelectorAll('.mobile-nav-link');
+        
+        // Başvuru Formu URL'leri (GÜNCELLENDİ)
+        const DELEGE_BASVURU_URL = 'https://forms.gle/USpkfYmcwfbhu9Pb7'; 
+        const KOMITE_BASKANI_BASVURU_URL = 'https://forms.gle/ESnesK9wfGwd6nUt9';
+        const DELEGASYON_EXCEL_URL = 'delegasyon_kayit_formu.xlsx'; // Buraya indirilmesini istediğin dosyanın tam adını yaz
+        const EDITOR_BASVURU_URL = 'https://forms.gle/UhBMu4cCTrLqHoid6';
+        const GAZETECI_BASVURU_URL = 'https://forms.gle/CfwTYMWUzCJpVnTA9';
+        const BASVURU_ANCHOR = '#basvuru';
+
+        const inactiveButtonHtml = `
+            <span class="mt-4 inline-block bg-gray-400 text-white font-semibold py-2 px-6 rounded-full shadow-inner cursor-not-allowed text-sm">
+                Yakında Açılacak
+            </span>
+        `;
+        const activeDelegeButtonHtml = `
+            <a href="${DELEGE_BASVURU_URL}" target="_blank" class="mt-4 inline-block ted-navy text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-[#00152a] transition duration-200 transform hover:scale-105">
+                BAŞVUR
+            </a>
+        `;
+        const activeKomiteBaskaniButtonHtml = `
+            <a href="${KOMITE_BASKANI_BASVURU_URL}" target="_blank" class="mt-4 inline-block ted-navy text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-[#00152a] transition duration-200 transform hover:scale-105">
+                BAŞVUR
+            </a>
+        `;
+
+        // GÜNCELLENEN TARİH: 24 Nisan 2026 (Programın başlangıç günü)
+        const TARGET_DATE = new Date("April 24, 2026 14:00:00").getTime();
+        let countdownInterval;
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = TARGET_DATE - now;
+            
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            const format = (num) => String(num).padStart(2, '0');
+
+            const daysEl = document.getElementById('days');
+            const hoursEl = document.getElementById('hours');
+            const minutesEl = document.getElementById('minutes');
+            const secondsEl = document.getElementById('seconds');
+            const countdownContainer = document.getElementById('countdown-container');
+
+            if (distance < 0) {
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                }
+                if (countdownContainer) {
+                    countdownContainer.innerHTML = '<div class="text-3xl font-extrabold ted-red-text bg-yellow-50 p-4 rounded-xl shadow-lg animate-pulse">FORUM BAŞLADI!</div>';
+                }
+                return;
+            }
+
+            if (daysEl && hoursEl && minutesEl && secondsEl) {
+                daysEl.innerHTML = format(days);
+                hoursEl.innerHTML = format(hours);
+                minutesEl.innerHTML = format(minutes);
+                secondsEl.innerHTML = format(seconds);
+            }
+        }
+
+        function startCountdown() {
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+            updateCountdown(); 
+            countdownInterval = setInterval(updateCountdown, 1000);
+        }
+
+        // Komite Verileri ve Metinleri
+        const committeeData = {
+            'hayvan-haklari': {
+                id: 'hayvan-haklari',
+                title: 'Hayvan Hakları Komitesi',
+                icon: 'fa-paw',
+                desc: 'Sokak hayvanları ve yaban hayatı koruma politikaları.',
+                text: `Hayvan Hakları İzleme Komitesi tarafından yayımlanan 2025 yılı Ocak-Haziran Medya İhlâl Raporu'na göre yalnızca altı aylık dönemde medyaya yansıyan vakalar üzerinden yaklaşık 500.000 hayvanın yaşam hakkının ihlâl edildiği tespit edilmiştir. Bu vakaların önemli bir kısmında failler tespit edilse bile uygulanan yaptırımların çoğu yetersiz kalma ve hayvanlara yönelik şiddetin caydırıcılığını düşürmektedir.<strong><em> Bu koşullar altında, hayvanların korunması ve hayvan hakları ihlâllerinin önlenmesi için nasıl çözümle geliştirilebilir?</em></strong>\n\n<strong>Yukarıdaki gündem kapsamında incelemeler ve araştırmalar yapılacak, çözüm önerileri üretilecektir.</strong>`
+            },
+            'cevre': {
+                id: 'cevre',
+                title: 'Çevre Komitesi',
+                icon: 'fa-leaf',
+                desc: 'İklim krizi ve sürdürülebilir şehir planlaması.',
+                text: `Temiz Hava Hakkı Platformunun (THHP) verdiği rapora göre 2024'te Türkiye'de 62.644 kişi hava kirliliğine bağlı olarak hayatını kaybetmiştir. Ayrıca rapora göre hava kirliliği nedeniyle ortaya çıkan ekonomik maliyet, ülkenin aynı yılın gayri safi yurtiçi hasılasının %10'una denk gelmektedir.<strong><em> Türkiye'de PM2,5 kirliliğinin azalması ve hava kirliliğinin insan sağlığı, çevre ve ülke ekonomisi üzerindeki etkilerini azaltmak amacıyla hangi önlemleri hayata geçirebilir?</em></strong>
+
+<strong>Yukarıdaki gündem kapsamında incelemeler ve araştırmalar yapılacak, çözüm önerileri üretilecektir.</strong>`
+            },
+            'ekonomi': {
+                id: 'ekonomi',
+                title: 'Ekonomi Komitesi',
+                icon: 'fa-chart-line',
+                desc: 'Dijital ekonomi ve genç işsizliği ile mücadele.',
+                text: `OECD raporuna göre Türkiye, 2025 yılının üçüncü çeyreğinde işsizlikte dünyada yedinci sıradayken, 2025 yılının dördüncü çeyreğinde %8,2 işsizlik oranıyla altıncı sıraya yükselmiştir. Özellikle genç işsizlik, kayıt dışı istihdam ve nitelik-iş uyumsuzluğu gibi faktörler ekonomik büyüme ile istihdam arasındaki ilişkinin zayıflamasına neden olmaktadır.<strong><em> Bu bilgiler ışığında Türkiye, işsizlik oranlarını düşürmek ve sürdürülebilir istihdam artışı sağlamak amacıyla hangi ekonomi politikalarını hayata geçirilmelidir?</em></strong>
+
+<strong>Yukarıdaki gündem kapsamında incelemeler ve araştırmalar yapılacak, çözüm önerileri üretilecektir.</strong>`
+            },
+            'yapay-zeka': {
+                id: 'yapay-zeka',
+                title: 'Yapay Zeka Komitesi',
+                icon: 'fa-robot',
+                desc: 'Etik yapay zeka ve otomasyonun geleceği.',
+                text: `Yapay zekâ tabanlı otomasyon sistemlerinin son on yılda hızla yaygınlaşması, üretimden hizmet sektörüne kadar birçok alanda iş yapış biçimlerini dönüştürmüş; bazı araştırmalar mevcut mesleklerin yaklaşık %30-40'ının önümüzdeki 10-15 yıl içinde yüksek düzeyde otomasyon riski taşıdığını ortaya koymuştur. TÜİK'in 2025 verilerine göre Türkiye'de bireylerin henüz %19,2'si üretken yapay zekâ araçlarını kullanmakta olup bu oran dijital adaptasyon kapasitesinin sınırlı olduğunu göstermektedir.<strong><em> İş gücünün önemli bir bölümünün dönüşüm riski altında olduğu bir ortamda Türkiye, istihdam kaybını en aza indirmek için hangi somut adımları atmalıdır?</em></strong>
+
+<strong>Yukarıdaki gündem kapsamında incelemeler ve araştırmalar yapılacak, çözüm önerileri üretilecektir.</strong>`
+            },
+            'egitim': {
+                id: 'egitim',
+                title: 'Eğitim Komitesi',
+                icon: 'fa-graduation-cap',
+                desc: 'Eğitimde fırsat eşitliği ve modern müfredat.',
+                text: `TÜZDEV'in (Türkiye Üstün Zekâlı ve Dahi Çocuklar Eğitim Vakfı) 2023 raporu üstün zekalı öğrencilerin büyük çoğunluğunun normal sınıf ortamında yeterince desteklenmediğini, MEB Rehberlik Hizmetleri Raporu özel öğrenme güçlüğü yaşayan öğrencilerin yarıdan fazlasının düzenli desteğe erişemediğini göstermektedir. Bu bulgular, kaynaştırma eğitiminin Türkiye'de teorik açıdan tamamlanmış olsa da pratikte etkili bir biçimde uygulanmadığını net bir şekilde ortaya koymaktadır.<strong><em> Bu doğrultuda, farklı öğrenme profiline sahip öğrencinin ortak öğrenme ortamlarında nitelikli ve kapsayıcı eğitim alabilmesi için hangi yapısal ve pedagojik düzenlemelerin yapılması gerekmektedir?</em></strong>
+
+<strong>Yukarıdaki gündem kapsamında incelemeler ve araştırmalar yapılacak, çözüm önerileri üretilecektir.</strong>`
+            },
+            'hukuk': {
+                id: 'hukuk',
+                title: 'Hukuk Komitesi',
+                icon: 'fa-balance-scale',
+                desc: 'Siber hukuk ve temel hakların korunması.',
+                text: `Son 10 yıllık süreçte Türkiye'de suça sürüklenen çocuk sayısı %51,53 artış göstermiştir. 2023 yılında 179 bin 19 çocuğun suça karıştığı belirlenirken bu sayı 2024'te bir önceki yıla göre %13 artarak 202.785'e ulaşmıştır. Türkiye İstatistik Kurumu verilerine yansıyan bu artış; çocukların erken yaşta suçla temas etmesi, sosyal medya ve dijital ortamların etkisi, ekonomik zorluklar ve eğitimden kopuş gibi çok boyutlu nedenlerle ilişkilendirilmektedir.<strong><em> Yasa koyucular, çocuğun üstün yararı ilkesini esas alarak suça sürüklenen çocuklara yönelik hangi önleyici, koruyucu ve yeniden topluma kazandırıcı hukuki ve kurumsal mekanizmaları geliştirmelidir?</em></strong>
+
+<strong>Yukarıdaki gündem kapsamında incelemeler ve araştırmalar yapılacak, çözüm önerileri üretilecektir.</strong>`
+            },
+            'dis-isler': {
+                id: 'dis-isler',
+                title: 'Dış İşler Komitesi',
+                icon: 'fa-globe-americas',
+                desc: 'Bölgesel işbirlikleri ve göç politikaları.',
+                text: `1936 tarihli Montrö Boğazlar Sözleşmesi, ticaret gemileri için geçiş serbestisini korurken savaş gemilerinin geçişini belirli kurallara bağlayarak Türkiye'nin güvenliğini gözeten bir geçiş düzeni oluşturmuştur ancak 1936 yılında İstanbul Boğazı'ndan günde ortalama 17 gemi geçerken günümüzde bu sayı ortalama 107 gemiye ulaşmış; özellikle tehlikeli madde taşıyan tanker trafiğinde belirgin bir artış yaşanmıştır.<strong><em> Artan gemi ve tanker trafiğinin Türk Boğazlarında insan hayatı, çevre ve güvenlik açısından oluşturduğu risklerin azaltılması amacıyla Türkiye'nin Montrö Boğazlar Sözleşmesi çerçevesinde diğer devletler ve uluslararası kuruluşlarla birlikte hangi önlemleri alması mümkündür?</em></strong>
+
+<strong>Yukarıdaki gündem kapsamında incelemeler ve araştırmalar yapılacak, çözüm önerileri üretilecektir.</strong>`
+            },
+            'saglik': {
+                id: 'saglik',
+                title: 'Sağlık Komitesi',
+                icon: 'fa-heartbeat',
+                desc: 'Halk sağlığı krizleri ve biyoteknoloji.',
+                text: `T.C. Sağlık Bakanlığı ile Dünya Sağlık Örgütü iş birliğinde yayımlanan 2023-2024 Bulaşıcı Olmayan Hastalıklar İzleme Raporlarına göre kalp ve damar hastalıkları, kanserler, diyabet ve kronik solunum yolu hastalıkları Türkiye'de erken ölümlerin başlıca nedenleri arasında yer almakta olup bu hastalıklar ülke genelindeki ölüm nedenlerinin %90'ını oluşturmaktadır. Sağlık Bakanlığı Halk Sağlığı Genel Müdürlüğünün 2024 Kronik Hastalıklar ve Risk Faktörleri Değerlendirme Raporu'na göre tütün kullanımı, sağlıksız beslenme, fiziksel hareketsizlik, obezite ve zararlı alkol tüketimi kronik hastalıkların ortaya çıkmasında belirleyici nedenler olarak tanımlanmaktadır.<strong><em> Bu bilgiler ışığında, Türkiye'de bulaşıcı olmayan kronik hastalıklara bağlı ölüm oranlarının azaltılması amacıyla, söz konusu önlenebilir risk faktörlerini hedef alan nasıl bir yaklaşım izlenmelidir?</em></strong>
+
+<strong>Yukarıdaki gündem kapsamında incelemeler ve araştırmalar yapılacak, çözüm önerileri üretilecektir.</strong>`
+            }
+        };
+        
+        // Sayfa İçerik Verileri
+        const pageContents = {
+            'ana-sayfa': {
+                title: 'TAKUF 2026',
+                content: `
+                    <div class="card p-8 text-center bg-white ted-navy-text mb-8 border-b-4 border-red-400">
+                        <p class="text-xl font-bold ted-navy-text">24 - 27 Nisan 2026 | TED Atakent Koleji, İstanbul</p>
+                    </div>
+
+                    <p class="text-center text-xl mb-6 max-w-3xl mx-auto">Lise öğrencilerini ulusal meseleler üzerine tartışmaya ve çözüm üretmeye davet ediyoruz. Geleceğin liderlerini bir araya getiren bu platformda yerinizi alın!</p>
+
+                    <div id="countdown-container" class="text-center mb-10">
+                        <h3 class="text-2xl font-bold ted-navy-text mb-4">FORUM BAŞLANGICINA KALAN SÜRE</h3>
+                        <div id="countdown" class="flex justify-center items-center text-center space-x-3 sm:space-x-6">
+                            <div class="countdown-item ted-navy text-white p-3 sm:p-5 rounded-xl shadow-xl">
+                                <div id="days" class="text-2xl sm:text-4xl font-extrabold">00</div>
+                                <div class="text-xs sm:text-sm font-light mt-1">GÜN</div>
+                            </div>
+                            <div class="countdown-item ted-navy text-white p-3 sm:p-5 rounded-xl shadow-xl">
+                                <div id="hours" class="text-2xl sm:text-4xl font-extrabold">00</div>
+                                <div class="text-xs sm:text-sm font-light mt-1">SAAT</div>
+                            </div>
+                            <div class="countdown-item ted-navy text-white p-3 sm:p-5 rounded-xl shadow-xl">
+                                <div id="minutes" class="text-2xl sm:text-4xl font-extrabold">00</div>
+                                <div class="text-xs sm:text-sm font-light mt-1">DAKİKA</div>
+                            </div>
+                            <div class="countdown-item ted-navy text-white p-3 sm:p-5 rounded-xl shadow-xl">
+                                <div id="seconds" class="text-2xl sm:text-4xl font-extrabold">00</div>
+                                <div class="text-xs sm:text-sm font-light mt-1">SANİYE</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <a href="${BASVURU_ANCHOR}" class="cta-button text-lg">
+                            <i class="fas fa-arrow-right mr-3"></i>
+                            HEMEN BAŞVUR
+                        </a>
+                    </div>
+                `
+            },
+            'duyurular': {
+                title: 'Resmi Duyurular',
+                content: `
+                    <div class="card flex flex-col items-center justify-center min-h-[40vh] p-10 text-center border-4 border-dashed border-red-300">
+                        <i class="fas fa-bell text-6xl ted-navy-text mb-6 animate-pulse"></i>
+                        <h3 class="text-4xl font-extrabold ted-navy-text mb-3">Güncel Bilgiler Yolda!</h3>
+                        <p class="text-xl text-gray-700 max-w-lg">Komite görevlendirmeleri, kesin program ve etkinlik detayları çok yakında bu alanda paylaşılacaktır.</p>
+                        <p class="text-lg text-gray-500 mt-4">Sosyal medya hesaplarımızı takip etmeyi unutmayın.</p>
+                        
+                        <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-6 mt-4 justify-center items-center">
+                            <a href="https://www.instagram.com/takuf26?igsh=ZXo3azFja2JjM2c3&utm_source=qr" target="_blank" class="text-2xl text-gray-700 hover:text-red-600 transition duration-150 flex items-center">
+                                <i class="fab fa-instagram mr-2"></i> 
+                                <span class="font-semibold ted-navy-text">@takuf26</span>
+                            </a>
+                            <a href="https://www.tiktok.com/@takuf26?_r=1&_t=ZS-93GJ4FvQzFV" target="_blank" class="text-2xl text-gray-700 hover:text-red-600 transition duration-150 flex items-center">
+                                <i class="fab fa-tiktok mr-2"></i> 
+                                <span class="font-semibold ted-navy-text">@takuf26</span>
+                            </a>
+                        </div>
+                    </div>
+                `
+            },
+            'hakkinda': {
+                title: 'Hakkımızda',
+                content: `
+                    <div class="card mb-12 border-l-4 border-l-ted-navy">
+                        <h3 class="text-2xl font-semibold ted-navy-text mb-3">Misyonumuz</h3>
+                        <p class="mb-4 text-gray-600 text-justify">Türkiye'nin modernleşmesi için eğitimin vazgeçilmez önemine inanmış olan Büyük Önder Mustafa Kemal Atatürk, 1 Kasım 1925'te Türkiye Büyük Millet Meclisinin açılışında yaptığı konuşmada, eğitimde hedeflenen seviyeye ulaşmak için özel girişimin çalışmalarına ihtiyaç olduğunu dile getirmiş ve topluma çağrıda bulunmuştur. Türk Eğitim Derneği, bu temel vizyon doğrultusunda, Atatürk'ün ve Türkiye Cumhuriyeti'ni kuran kadroların öncülüğünde 31 Ocak 1928 tarihinde kurulmuş, ilk adı "Türk Maarif Cemiyeti" olan derneğimiz köklü bir sivil toplum kuruluşu olarak kurulduğu günden beri eğitim alanında faaliyet göstermekte; aynı zamanda yeterli maddi olanağa sahip olmayan başarılı çocukların eğitimlerini desteklemekte ve Türk eğitim sistemine maddi ve bilimsel katkılar sağlamaktadır.</p>
+                        <p class="mb-4 text-gray-600 text-justify">Biz gençler olarak Ata'mızdan aldığımız gençlik meşalesini, yaşadığımız sürece devam ettirmek amacındayız. Bu misyon ve amaçla 24-25-26-27 Nisan 2026 tarihlerinde TED Özel Atakent Anadolu Lisesi ev sahipliğinde II. Ulusal Forumu'muzu düzenleyeceğiz. Dört gün sürecek olan forum etkinliğimizin asıl amacı lise gençliğinin yakın ve uzak çevre sorunlarına duyarlılığını arttırmak, bunu yaparken de gençliğimizin bu sorunlara yaklaşım ve çözümlerinde ortak düşünebilmelerini sağlamak ve bu biçimde üretken, özgüvenli, gelişmiş bireyler olmalarına yardımcı olmaktır. Forum etkinliğimizin sonucunda, toplumda var olan yaşanabilecek sorunlardan bilgi sahibi ve haberdar olmuş etkin ve çözüm üretebilen bir nesil yetiştirilmiş olacaktır.</p>
+                    </div>
+
+                    <div class="mb-6">
+                        <h3 class="text-2xl font-semibold ted-navy-text mb-6 pl-2 border-l-4 border-red-500">Ekibimiz</h3>
+                        
+                        <div class="mb-6 max-w-xs mx-auto">
+                            <div class="card flex flex-col items-center text-center overflow-hidden border-t-4 border-ted-red min-h-[400px] hover:shadow-xl transition-shadow" style="padding: 0;">
+                                <div class="w-full pt-6 pb-3 bg-white" style="min-height: 72px; display: flex; align-items: center; justify-content: center;">
+                                    <h4 class="font-extrabold text-xl ted-navy-text tracking-wider uppercase">Konferans Başkanı</h4>
+                                </div>
+                                <div class="w-full h-64 bg-gray-200 border-y border-gray-100">
+                                    <img src="enes.jpeg" alt="Mustafa Enes BOYRAZ" class="w-full h-full object-cover" style="object-position: center 25%;">
+                                </div>
+                                <div class="w-full py-5 px-4 bg-white">
+                                    <p class="text-lg font-medium text-gray-800">Mustafa Enes BOYRAZ</p>
+                                    <p class="text-sm text-gray-500 mt-2 font-light">mustafaenes.boyraz@stu.tedatakent.k12.tr</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                            
+                            <div class="card flex flex-col items-center text-center overflow-hidden border-t-4 border-ted-red min-h-[400px] hover:shadow-xl transition-shadow" style="padding: 0;">
+                                <div class="w-full pt-6 pb-3 bg-white" style="min-height: 72px; display: flex; align-items: center; justify-content: center;">
+                                    <h4 class="font-extrabold text-xl ted-navy-text tracking-wider uppercase">Organizasyon Başkanı</h4>
+                                </div>
+                                <div class="w-full h-64 bg-gray-200 border-y border-gray-100">
+                                    <img src="lara.jpeg" alt="Lara UZEL" class="w-full h-full object-cover" style="object-position: center 25%;">
+                                </div>
+                                <div class="w-full py-5 px-4 bg-white">
+                                    <p class="text-lg font-medium text-gray-800">Lara UZEL</p>
+                                    <p class="text-sm text-gray-500 mt-2 font-light">lara.uzel@stu.tedatakent.k12.tr</p>
+                                </div>
+                            </div>
+
+                            <div class="card flex flex-col items-center text-center overflow-hidden border-t-4 border-ted-red min-h-[400px] hover:shadow-xl transition-shadow" style="padding: 0;">
+                                <div class="w-full pt-6 pb-3 bg-white" style="min-height: 72px; display: flex; align-items: center; justify-content: center;">
+                                    <h4 class="font-extrabold text-xl ted-navy-text tracking-wider uppercase">Organizasyon Başkanı</h4>
+                                </div>
+                                <div class="w-full h-64 bg-gray-200 border-y border-gray-100">
+                                    <img src="zeynep.jpeg" alt="Zeynep Çağla AYDIN" class="w-full h-full object-cover" style="object-position: center 25%;">
+                                </div>
+                                <div class="w-full py-5 px-4 bg-white">
+                                    <p class="text-lg font-medium text-gray-800">Zeynep Çağla AYDIN</p>
+                                    <p class="text-sm text-gray-500 mt-2 font-light">zeynepcagla.aydin@stu.tedatakent.k12.tr</p>
+                                </div>
+                            </div>
+
+                            <div class="card flex flex-col items-center text-center overflow-hidden border-t-4 border-ted-red min-h-[400px] hover:shadow-xl transition-shadow" style="padding: 0;">
+                                <div class="w-full pt-6 pb-3 bg-white" style="min-height: 72px; display: flex; align-items: center; justify-content: center;">
+                                    <h4 class="font-extrabold text-xl ted-navy-text tracking-wider uppercase">Organizasyon Başkanı</h4>
+                                </div>
+                                <div class="w-full h-64 bg-gray-200 border-y border-gray-100">
+                                    <img src="deniz.jpeg" alt="Deniz TÜRKER" class="w-full h-full object-cover" style="object-position: center 25%;">
+                                </div>
+                                <div class="w-full py-5 px-4 bg-white">
+                                    <p class="text-lg font-medium text-gray-800">Deniz TÜRKER</p>
+                                    <p class="text-sm text-gray-500 mt-2 font-light">deniz.turker@stu.tedatakent.k12.tr</p>
+                                </div>
+                            </div>
+
+                            <div class="card flex flex-col items-center text-center overflow-hidden border-t-4 border-ted-red min-h-[400px] hover:shadow-xl transition-shadow" style="padding: 0;">
+                                <div class="w-full pt-6 pb-3 bg-white" style="min-height: 72px; display: flex; align-items: center; justify-content: center;">
+                                    <h4 class="font-extrabold text-xl ted-navy-text tracking-wider uppercase">Başeditör</h4>
+                                </div>
+                                <div class="w-full h-64 bg-gray-200 border-y border-gray-100">
+                                    <img src="elif.jpeg" alt="Elif Yade KILIÇ" class="w-full h-full object-cover" style="object-position: center 25%;">
+                                </div>
+                                <div class="w-full py-5 px-4 bg-white">
+                                    <p class="text-lg font-medium text-gray-800">Elif Yade KILIÇ</p>
+                                    <p class="text-sm text-gray-500 mt-2 font-light">elifyade.kilic@stu.tedatakent.k12.tr</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="mt-12">
+                        <h3 class="text-2xl font-semibold ted-navy-text mb-6 text-center">ANA TAKIM</h3>
+                        <div class="card overflow-hidden rounded-2xl shadow-lg border-t-4 border-ted-red" style="padding: 0;">
+                            <img src="ekipfoto.jpeg" alt="Ana Takım" class="w-full object-cover" style="max-height: 520px; object-fit: cover; object-position: center 30%;">
+                        </div>
+                    </div>
+                `
+            },
+            'komiteler': {
+                title: 'Komitelerimiz',
+                content: `
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="committee-grid">
+                        </div>
+                `
+            },
+            'kurallar': {
+                title: 'Genel Şartları ',
+                content: `
+                    <div class="card max-w-4xl mx-auto border-t-4 border-ted-red p-6 sm:p-8">
+                        <ul class="list-disc list-inside space-y-4 text-gray-700 leading-relaxed text-left">
+                            <li>Forum yüz yüze olacak şekilde TED Özel Atakent Anadolu Lisesi ev sahipliğinde düzenlenecektir.</li>
+                            <li>Foruma; İstanbul Genelindeki Resmi Anadolu Lisesi, Resmi Bilim Sanat Merkezi, Resmi Fen Lisesi, Özel Anadolu Lisesi, Özel Fen Lisesi, Resmî Sosyal Bilimler Lisesi öğrencileri katılabilecektir</li>
+                            <li>Foruma 9,10,11 ve 12. Sınıflarda okuyanlar başvuru yapabilir.</li>
+                            <li>Forumun resmi dili Türkçedir.</li>
+                            <li>Komiteler 24 delege, 2 gazeteci, 2 komite başkanı ve 1 orgadan oluşur.</li>
+                            <li>Her okuldan en fazla 15 öğrenci öğretmenleri eşleğinde delege olarak başvuru yapabilir.</li>
+                            <li>Her okuldan en fazla 3 öğrenci aynı komitede yer alabilir.</li>
+                            <li>Komite Başkanlığı, Editör başvuruları 18 Şubat – 30 Mart 2026 tarihleri arasında yapılıp seçilenlere duyurulacaktır.</li>
+                            <li>Bireysel(Delege), Delegasyon , Gazeteci 18 Şubat – 6 Nisan 2026 tarihleri arasında yapılıp seçilenlere duyurulacaktır.</li>
+                            <li>Başvurular, mail adresimiz olan takuf2026@tedatakent.k12.tr yapılmalıdır.</li>
+                            <li>İstanbul dışından katılan öğrenciler, forum organizasyonu ekibi ile anlaşılıp tavsiye edilen bir otel olmak birlikte konaklama seçeneği kendilerine bırakılacaktır.</li>
+                            <li>Foruma katılacak katılımcıların ulaşım masrafları kendileri tarafından karşılanacaktır.</li>
+                            <li>Aynı okuldan katılımcılar koşullar el verdiğince farklı komitelere yerleştirilecektir.</li>
+                            <li>Foruma katılan her katılımcıya katılım sertifikası verilecektir.</li>
+                            <li>Foruma katılan herkes, forum süresince üzerinde ismi ve görevi yazılı olan yaka kartlarını takacaktır.</li>
+                            <li>Forumun organizasyonunu TED Özel Atakent Anadolu Lisesi öğrencileri üstlenecektir.</li>
+                            <li>Komitelerde, komite çalışmaları boyunca tartışılan konulardan elde edilen sonuçlar karar taslağı haline getirilecektir. Bu bildiriler kapanış oturumunda sunulacaktır.</li>
+                            <li>Delegelerin ait oldukları komitelerin tüm çalışmalarına, açılış ve kapanış törenlerine katılımları gerekmektedir. Aksi halde katılım belgesi verilmeyecektir.</li>
+                            <li>Delegelerin ait oldukları komitelerin konuları hakkında araştırma yaparak gelmesi beklenir.</li>
+                            <li>Organizasyon süresince tütün ve alkol içeren maddeler bulundurulamaz ve kullanılamaz.</li>
+                            <li>Katılımcılardan istediğimiz mail adresi ve cep telefonu bilgileri katılımcılarla iletişim kurabilmemiz için önemli olduğundan sürekli kullandıkları iletişim adreslerinin verilmesi gerekmektedir.</li>
+                            <li>Açılış, Genel Kurulda katılımcıların takım elbise giyme zorunluluğu vardır.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            'program': {
+                title: '4 Günlük Program Özeti',
+                content: `
+                    <p class="text-xl mb-8 text-center text-gray-600">Yoğun ve verimli geçecek 4 günlük forum akışımız:</p>
+                    
+                    <div class="space-y-6">
+                        <div class="card border-l-8 border-l-red-400">
+                            <h4 class="font-bold text-xl sm:text-2xl ted-navy-text mb-3 flex flex-col sm:flex-row sm:items-center">
+                                <span class="flex items-center"><i class="fas fa-calendar-day mr-3"></i> 24.04.2026 (1.GÜN)</span>
+                                <span class="hidden sm:inline mx-2">-</span>
+                                <span class="text-sm sm:text-base font-medium text-gray-500 mt-1 sm:mt-0">(Yarı Resmi Kıyafet)</span>
+                            </h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                                <li><span class="font-semibold">14.00-15.00:</span> Kampüse varış, kayıt ve ikram</li>
+                                <li><span class="font-semibold">15.00-16.30:</span> Ortak Oryantasyon</li>
+                                <li><span class="font-semibold">16.30-18.00:</span> Açılış Programı</li>
+                                <li><span class="font-semibold">18.00-18.15:</span> Kahve Molası</li>
+                                <li><span class="font-semibold">18.15-19.15:</span> Komite Oryantasyon Çalışması</li>
+                                <li><span class="font-semibold">19.15-19.30:</span> Servislerin Hareketi</li>
+                            </ul>
+                        </div>
+
+                        <div class="card border-l-8 border-l-red-400">
+                            <h4 class="font-bold text-xl sm:text-2xl ted-navy-text mb-3 flex flex-col sm:flex-row sm:items-center">
+                                <span class="flex items-center"><i class="fas fa-briefcase mr-3"></i> 25.04.2026 (2.GÜN)</span>
+                                <span class="hidden sm:inline mx-2">-</span>
+                                <span class="text-sm sm:text-base font-medium text-gray-500 mt-1 sm:mt-0">(Resmi Kıyafet)</span>
+                            </h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                                <li><span class="font-semibold">08.45-09.00:</span> Kampüse Varış</li>
+                                <li><span class="font-semibold">09.00-10.30:</span> Komite Çalışmaları</li>
+                                <li><span class="font-semibold">10.30-11.00:</span> Kahve Molası</li>
+                                <li><span class="font-semibold">11.00-12.00:</span> Uzman Konuklarla Çalışma</li>
+                                <li><span class="font-semibold">12.00-13.30:</span> Komite Çalışması</li>
+                                <li><span class="font-semibold">13.30-14.30:</span> Öğlen Yemeği</li>
+                                <li><span class="font-semibold">14.30-16.15:</span> Komite Çalışmaları</li>
+                                <li><span class="font-semibold">16.15-16.45:</span> Kahve Molası</li>
+                                <li><span class="font-semibold">16.45-18.00:</span> Komite Çalışmaları</li>
+                                <li><span class="font-semibold">18.00-18.30:</span> Kahve Molası</li>
+                                <li><span class="font-semibold">18.30-19.15:</span> Komite Çalışmaları</li>
+                                <li><span class="font-semibold">19.30:</span> Servislerin Hareketi</li>
+                                <li class="text-red-600 font-bold bg-red-50 p-1 rounded"><span class="font-bold">20.00 – 22.00:</span> GALA YEMEĞİ</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card border-l-8 border-l-red-400">
+                             <h4 class="font-bold text-xl sm:text-2xl ted-navy-text mb-3 flex flex-col sm:flex-row sm:items-center">
+                                <span class="flex items-center"><i class="fas fa-edit mr-3"></i> 26.04.2026 (3.GÜN)</span>
+                                <span class="hidden sm:inline mx-2">-</span>
+                                <span class="text-sm sm:text-base font-medium text-gray-500 mt-1 sm:mt-0">(Yarı Resmi Kıyafet)</span>
+                            </h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                                <li><span class="font-semibold">08.45-09.00:</span> Kampüse Varış</li>
+                                <li><span class="font-semibold">09.00-10.45:</span> Komite Çalışmaları</li>
+                                <li><span class="font-semibold">10.45-11.15:</span> Kahve Molası</li>
+                                <li><span class="font-semibold">11.15-13.00:</span> Komite Çalışmaları</li>
+                                <li><span class="font-semibold">13.00-14.00:</span> Öğlen Yemeği</li>
+                                <li><span class="font-semibold">14.00-15.45:</span> Komite Çalışmaları</li>
+                                <li><span class="font-semibold">15.45-16.15:</span> Kahve Molası</li>
+                                <li><span class="font-semibold">16.15-18.00:</span> Komite Çalışmaları</li>
+                                <li><span class="font-semibold">18.00-18.30:</span> Kahve Molası</li>
+                                <li><span class="font-semibold">18.30-19.15:</span> Genel Kurul Hazırlıkları</li>
+                                <li><span class="font-semibold">19.15-19.30:</span> Servislerin Hareketi</li>
+                            </ul>
+                        </div>
+
+                        <div class="card border-l-8 border-l-red-400">
+                             <h4 class="font-bold text-xl sm:text-2xl ted-navy-text mb-3 flex flex-col sm:flex-row sm:items-center">
+                                <span class="flex items-center"><i class="fas fa-handshake mr-3"></i> 27.04.2026 (4.GÜN)</span>
+                                <span class="hidden sm:inline mx-2">-</span>
+                                <span class="text-sm sm:text-base font-medium text-gray-500 mt-1 sm:mt-0">(Resmi Kıyafet)</span>
+                            </h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                                <li><span class="font-semibold">08.30-09.00:</span> İkram</li>
+                                <li><span class="font-semibold">09.00-11.30:</span> Genel Kurul 1. Oturum</li>
+                                <li><span class="font-semibold">11.30-11.45:</span> Kahve Molası</li>
+                                <li><span class="font-semibold">11.45-14.00:</span> Genel Kurul 2. Oturum</li>
+                                <li><span class="font-semibold">14.15-15.00:</span> Öğlen Yemeği</li>
+                                <li><span class="font-semibold">15.00-17.30:</span> Genel Kurul 3. Oturum</li>
+                                <li><span class="font-semibold">17.30-17.45:</span> Kahve Molası</li>
+                                <li><span class="font-semibold">17.45-18.30:</span> Genel Kurul 4. Oturum</li>
+                                <li><span class="font-semibold">18.30-19.30:</span> Kapanış Seremonisi</li>
+                                <li><span class="font-semibold">19.30-20.00:</span> Servislerin Hareketi</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            'basvuru': {
+                title: 'Başvurular',
+                content: `
+                    <p class="text-xl mb-8 text-center text-gray-600">Rolünüzü seçin ve forumdaki yerinizi ayırtın. Tüm başvurularımız açılmıştır.</p>
+
+                    <div class="flex flex-wrap justify-center gap-4 sm:gap-6">
+                        <div class="card w-full sm:w-[30%] flex flex-col justify-between items-center text-center bg-gray-50 border-t-8 border-t-ted-red p-4">
+                            <h4 class="font-extrabold ted-navy-text text-lg sm:text-xl mb-1">KOMİTE BAŞKANI</h4>
+                            <p class="text-xs sm:text-sm text-gray-500 mb-3">Komite oturumlarının yönetimi ve moderasyonu.</p>
+                            <p class="text-sm sm:text-lg text-gray-700 mt-2">Tarih: <span class="ted-navy-text font-bold">24 Şubat 2026 - 30 Mart 2026</span></p>
+                            ${activeKomiteBaskaniButtonHtml}
+                        </div>
+                        <div class="card w-full sm:w-[30%] flex flex-col justify-between items-center text-center bg-gray-50 border-t-8 border-t-ted-red p-4">
+                            <h4 class="font-extrabold ted-navy-text text-lg sm:text-xl mb-1">EDİTÖR</h4>
+                            <p class="text-xs sm:text-sm text-gray-500 mb-3">Metinlerin düzenlenmesi ve komitelere destek.</p>
+                             <p class="text-sm sm:text-lg text-gray-700 mt-2">Tarih: <span class="ted-navy-text font-bold">24 Şubat 2026 - 30 Mart 2026</span></p>
+                            <a href="${EDITOR_BASVURU_URL}" target="_blank" class="mt-4 inline-block ted-navy text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-[#00152a] transition duration-200 transform hover:scale-105">
+                                BAŞVUR
+                            </a>
+                        </div>
+                        <div class="card w-full sm:w-[30%] flex flex-col justify-between items-center text-center bg-gray-50 border-t-8 border-t-ted-red p-4">
+                            <h4 class="font-extrabold ted-navy-text text-lg sm:text-xl mb-1">GAZETECİ</h4>
+                            <p class="text-xs sm:text-sm text-gray-500 mb-3">Forum boyunca haber ve raporlama görevleri.</p>
+                             <p class="text-sm sm:text-lg text-gray-700 mt-2">Tarih: <span class="ted-navy-text font-bold">24 Şubat 2026 - 6 Nisan 2026</span></p>
+                            <a href="${GAZETECI_BASVURU_URL}" target="_blank" class="mt-4 inline-block ted-navy text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-[#00152a] transition duration-200 transform hover:scale-105">
+                                BAŞVUR
+                            </a>
+                        </div>
+
+                        <div class="card w-full sm:w-[30%] flex flex-col justify-between items-center text-center bg-gray-50 border-t-8 border-t-ted-red p-4">
+                            <h4 class="font-extrabold ted-navy-text text-lg sm:text-xl mb-1">DELEGASYON EKİBİ</h4>
+                            <p class="text-xs sm:text-sm text-gray-500 mb-3">Okul adına katılım organizasyonu ve koordinasyonu. Lütfen indirilen formu takuf2026@tedatakent.k12.tr mail adresine atınız.</p>
+                            <p class="text-sm sm:text-lg text-gray-700 mt-2">Tarih: <span class="ted-navy-text font-bold">24 Şubat 2026 - 6 Nisan 2026</span></p>
+                            
+                            <a href="${DELEGASYON_EXCEL_URL}" download class="mt-4 inline-block ted-navy text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-[#00152a] transition duration-200 transform hover:scale-105">
+                                FORMU İNDİR
+                            </a>
+                        </div>
+                        
+                        <div class="card w-full sm:w-[30%] flex flex-col justify-between items-center text-center bg-gray-50 border-t-8 border-t-ted-red p-4">
+                            <h4 class="font-extrabold ted-navy-text text-lg sm:text-xl mb-1">DELEGE (Bireysel)</h4>
+                            <p class="text-xs sm:text-sm text-gray-500 mb-3">Komitelerde aktif tartışma ve çözüm üretimi.</p>
+                             <p class="text-sm sm:text-lg text-gray-700 mt-2">Tarih: <span class="ted-navy-text font-bold">24 Şubat 2026 - 6 Nisan 2026</span></p>
+                            ${activeDelegeButtonHtml}
+                        </div>
+                    </div>
+                `
+            },
+            'iletisim': {
+                title: 'Bize Ulaşın',
+                content: `
+                    <div class="max-w-4xl mx-auto">
+                        <h3 class="text-2xl font-semibold ted-navy-text mb-6">Organizasyon Ekibi</h3>
+                        
+                        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-ted-red mb-10 text-gray-700">
+                            <p class="mb-4">
+                                <strong>II.TAKUF’26</strong><br>
+                                <strong>Mail:</strong> <a href="mailto:takuf2026@tedatakent.k12.tr" class="hover:text-red-600">takuf2026@tedatakent.k12.tr</a><br>
+                                Instagram: <a href="https://instagram.com/takuf.official" target="_blank" class="hover:text-red-600">@takuf.official</a><br>
+                                TikTok: <a href="https://tiktok.com/@tedatakent.takuf" target="_blank" class="hover:text-red-600">@tedatakent.takuf</a>
+                            </p>
+
+                            <p class="mb-4">
+                                <span class="font-bold ted-navy-text">Danışman Öğretmen:</span> Yılmaz YALAP<br>
+                                E-posta: <a href="mailto:yilmaz.yalap@tedatakent.k12.tr" class="hover:text-red-600">yilmaz.yalap@tedatakent.k12.tr</a><br>
+                                Tel: 0531 859 76 07
+                            </p>
+
+                            <p class="mb-4">
+                                <span class="font-bold ted-navy-text">Forum Başkanı:</span> Mustafa Enes BOYRAZ<br>
+                                E-posta: <a href="mailto:mustafaenes.boyraz@stu.tedatakent.k12.tr" class="hover:text-red-600">mustafaenes.boyraz@stu.tedatakent.k12.tr</a>
+                            </p>
+
+                            <p class="mb-4">
+                                <span class="font-bold ted-navy-text">Baş Organizatör:</span> Lara UZEL<br>
+                                E-Posta: <a href="mailto:lara.uzel@stu.tedatakent.k12.tr" class="hover:text-red-600">lara.uzel@stu.tedatakent.k12.tr</a>
+                            </p>
+
+                            <p class="mb-4">
+                                <span class="font-bold ted-navy-text">Baş Organizatör:</span> Zeynep Çağla AYDIN<br>
+                                E-Posta: <a href="mailto:zeynepcagla.aydin@stu.tedatakent.k12.tr" class="hover:text-red-600">zeynepcagla.aydin@stu.tedatakent.k12.tr</a>
+                            </p>
+
+                            <p>
+                                <span class="font-bold ted-navy-text">Baş Organizatör:</span> Deniz TÜRKER<br>
+                                E-Posta: <a href="mailto:deniz.turker@stu.tedatakent.k12.tr" class="hover:text-red-600">deniz.turker@stu.tedatakent.k12.tr</a>
+                            </p>
+                        </div>
+                        
+                        <div class="card border-l-4 border-l-red-400">
+                            <h3 class="text-2xl font-semibold ted-navy-text mb-4 flex items-center"><i class="fas fa-map-marker-alt mr-3"></i> Etkinlik Yeri</h3>
+                            <p class="text-lg font-medium text-gray-700 mb-4">TED Atakent Koleji, Atakent Mah. Menekşe Sok. No: 4/1, Küçükçekmece/İstanbul</p>
+                            
+                            <div class="w-full h-80 rounded-lg shadow-xl mt-4 overflow-hidden border-2 border-gray-200 bg-gray-100 flex items-center justify-center">
+                                <iframe 
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3008.8390800865664!2d28.760326074838968!3d41.05064801681675!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14caa6811b402707%3A0x6ec367aea23cb137!2sTED%20Atakent%20Koleji!5e0!3m2!1str!2str!4v1770312558800!5m2!1str!2str"
+                                    width="100%" 
+                                    height="100%" 
+                                    style="border:0;"
+                                    allowfullscreen="" 
+                                    loading="lazy"
+                                    referrerpolicy="no-referrer-when-downgrade"
+                                    title="TED Atakent Koleji Harita Konumu">
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+                `
+            }
+        };
+
+        // Komite Detay Sayfalarını Oluştur
+        Object.values(committeeData).forEach(committee => {
+            pageContents[`komite-${committee.id}`] = {
+                title: committee.title,
+                content: `
+                    <div class="card max-w-4xl mx-auto border-t-8 border-ted-red p-6 sm:p-10">
+                         <div class="flex items-center justify-between mb-6 border-b pb-4">
+                            <h3 class="text-2xl font-bold ted-navy-text flex items-center">
+                                <i class="fas ${committee.icon} mr-3 text-3xl text-red-600"></i>
+                                Komite Gündemi
+                            </h3>
+                             <a href="#komiteler" class="text-sm font-semibold text-gray-500 hover:text-red-600 transition-colors">
+                                <i class="fas fa-arrow-left mr-1"></i> Geri Dön
+                            </a>
+                        </div>
+                        
+                        <div class="prose prose-lg text-gray-700 leading-relaxed">
+                            <p class="whitespace-pre-line" style="text-align: justify;">${committee.text}</p>
+                        </div>
+
+                         <div class="mt-8 text-center">
+                             <a href="#komiteler" class="inline-block bg-gray-200 text-gray-700 px-6 py-2 rounded-full font-semibold hover:bg-gray-300 transition-colors">
+                                Komitelere Dön
+                            </a>
+                        </div>
+                    </div>
+                `
+            };
+        });
+
+        function loadPage(pageKey) {
+            const data = pageContents[pageKey];
+            if (!data) return;
+
+            contentArea.style.opacity = 0;
+
+            if (pageKey !== 'ana-sayfa' && countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+            
+            document.title = `TAKUF 2026 | ${data.title}`;
+
+
+            setTimeout(() => {
+                const imageHtml = data.image ? `
+                    <div class="w-full mb-8">
+                        <img src="${data.image}" alt="${data.title} görseli" class="w-full h-auto object-cover rounded-xl shadow-lg border-2 border-gray-200">
+                    </div>
+                ` : '';
+                
+                const pageHtml = `
+                    ${imageHtml}
+                    <h2 class="text-4xl font-extrabold ted-red-text mb-8 text-center">${data.title}</h2>
+                    <div>
+                        ${data.content}
+                    </div>
+                `;
+                
+                contentArea.innerHTML = pageHtml;
+
+                // Eğer komiteler sayfasındaysak, ızgarayı JS ile doldur
+                if (pageKey === 'komiteler') {
+                    const grid = document.getElementById('committee-grid');
+                    if(grid) {
+                        grid.innerHTML = Object.values(committeeData).map(c => `
+                            <div class="card flex flex-col items-center text-center p-6 border-t-4 border-ted-red hover:shadow-2xl transition-all duration-300">
+                                <i class="fas ${c.icon} text-4xl ted-navy-text mb-3"></i>
+                                <h4 class="font-bold text-xl mb-2 ted-navy-text">${c.title.replace(' Komitesi','')}</h4>
+                                <p class="text-sm text-gray-600 mb-4">${c.desc}</p>
+                                <a href="#komite-${c.id}" class="mt-auto inline-block ted-navy text-white text-xs font-bold py-2 px-4 rounded-full shadow hover:bg-red-600 transition duration-200">
+                                    KOMİTE GÜNDEMİ
+                                </a>
+                            </div>
+                        `).join('');
+                    }
+                }
+
+                contentArea.style.opacity = 1;
+
+                if (pageKey === 'ana-sayfa') {
+                    startCountdown();
+                }
+
+                updateActiveLink(pageKey);
+                // Eğer alt sayfa (komite detayı) ise ana menüdeki "Komiteler" linkini aktif tutabiliriz
+                if(pageKey.startsWith('komite-')) {
+                     updateActiveLink('komiteler');
+                }
+
+            }, 300);
+            
+            // Sayfa başına kaydır
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateActiveLink(activeKey) {
+            navLinks.forEach(link => {
+                link.classList.remove('bg-red-700', 'font-extrabold');
+                link.classList.add('text-white', 'hover:bg-red-700');
+
+                if (link.dataset.page === activeKey) {
+                    link.classList.add('bg-red-700', 'font-extrabold');
+                    link.classList.remove('text-white', 'hover:bg-red-700');
+                }
+            });
+        }
+
+
+        function toggleMobileMenu() {
+            mobileMenu.classList.toggle('open');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : 'auto';
+        }
+
+        mobileMenuButton.addEventListener('click', toggleMobileMenu);
+        closeMenuButton.addEventListener('click', toggleMobileMenu);
+        overlay.addEventListener('click', toggleMobileMenu); 
+
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageKey = link.getAttribute('data-page');
+                window.location.hash = pageKey;
+                
+                if (mobileMenu.classList.contains('open')) {
+                    toggleMobileMenu();
+                }
+            });
+        });
+
+        window.addEventListener('hashchange', () => {
+            const pageKey = window.location.hash.substring(1) || 'ana-sayfa';
+            loadPage(pageKey);
+        });
+
+        window.addEventListener('load', () => {
+            const initialPageKey = window.location.hash.substring(1) || 'ana-sayfa';
+            loadPage(initialPageKey);
+        });
+
+    </script>
+</body>
+</html>
